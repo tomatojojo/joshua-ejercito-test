@@ -2,29 +2,43 @@ import React, { useState, useEffect } from 'react';
 import './Tabs.css';
 
 const Tabs: React.FC = () => {
-    const [selectedTab, setSelectedTab] = useState<string>('');
-    const [isSearchSelected, setIsSearchSelected] = useState<boolean>(false); 
+    const [selectedTab, setSelectedTab] = useState<string>('START');
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>(''); // Search query
     const [games, setGames] = useState<any[]>([]);
 
     const handleTabClick = async (tabName: string) => {
-        if (tabName === 'SEARCH') {
-          setIsSearchVisible(!isSearchVisible);
-          setIsSearchSelected(!isSearchSelected);
-        } else {
-          setSelectedTab(tabName);
-        //   const response = await fetch(`http://localhost:5000/api/games/${tabName}`);
-        //   const data = await response.json();
-        //   setGames(data);
+        setSelectedTab(tabName);
+        // Fetch the games based on the selected tab
+        const fetchGames = new Promise<any[]>((resolve, reject) => {
+            fetch(`http://localhost:5000/api/games/${tabName}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Bad Network Response');
+                    }
+                    return response.json();
+                })
+                .then((data) => resolve(data))
+                .catch((error) => reject(error));
+        });
 
+        try {
+            const data = await fetchGames;
+            setGames(data);
+        } catch (error) {
+            console.error('Error fetching games:', error);
+            setGames([]);
+        }
+    };
+
+    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+
+        if (e.target.value.trim() === '') {
+            // If the search query is empty, reset the games list
             const fetchGames = new Promise<any[]>((resolve, reject) => {
-                fetch(`http://localhost:5000/api/games/${tabName}`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Bad Network Response');
-                        }
-                        return response.json();
-                    })
+                fetch(`http://localhost:5000/api/games/${selectedTab}`)
+                    .then((response) => response.json())
                     .then((data) => resolve(data))
                     .catch((error) => reject(error));
             });
@@ -36,58 +50,54 @@ const Tabs: React.FC = () => {
                 console.error('Error fetching games:', error);
                 setGames([]);
             }
+        } else {
+            // Filter the games based on search query
+            const filteredGames = games.filter((game) =>
+                game.name.toLowerCase().includes(e.target.value.toLowerCase())
+            );
+            setGames(filteredGames);
         }
     };
 
-    const chunkGames = (games: any[]) => {
-        const chunks = [];
-        let i = 0;
-        for (i = 0; i < games.length; i += 3) {
-            chunks.push(games.slice(i, i + 3));
-        }
-        return chunks;
-    };
+    useEffect(() => {
+        handleTabClick(selectedTab); // Fetch games when tab is first selected
+    }, [selectedTab]);
 
     return (
         <div className="tabs-container">
             <div className="tabs">
-                <div 
-                    className={`tab ${isSearchSelected ? 'selected' : ''}`} // Keep the search tab highlighted
-                    onClick={() => handleTabClick('SEARCH')}
+                <div
+                    className={`tab ${selectedTab === 'SEARCH' ? 'selected' : ''}`}
+                    onClick={() => setIsSearchVisible(!isSearchVisible)}
                 >
                     SEARCH
                 </div>
-
-                <div 
-                    className={`tab ${selectedTab === 'START' ? 'selected' : ''}`} 
+                <div
+                    className={`tab ${selectedTab === 'START' ? 'selected' : ''}`}
                     onClick={() => handleTabClick('START')}
                 >
                     START
                 </div>
-
-                <div 
-                    className={`tab ${selectedTab === 'NEW' ? 'selected' : ''}`} 
+                <div
+                    className={`tab ${selectedTab === 'NEW' ? 'selected' : ''}`}
                     onClick={() => handleTabClick('NEW')}
                 >
                     NEW
                 </div>
-
-                <div 
-                    className={`tab ${selectedTab === 'SLOTS' ? 'selected' : ''}`} 
+                <div
+                    className={`tab ${selectedTab === 'SLOTS' ? 'selected' : ''}`}
                     onClick={() => handleTabClick('SLOTS')}
                 >
                     SLOTS
                 </div>
-
-                <div 
-                    className={`tab ${selectedTab === 'LIVE' ? 'selected' : ''}`} 
+                <div
+                    className={`tab ${selectedTab === 'LIVE' ? 'selected' : ''}`}
                     onClick={() => handleTabClick('LIVE')}
                 >
                     LIVE
                 </div>
-
-                <div 
-                    className={`tab ${selectedTab === 'JACKPOT' ? 'selected' : ''}`} 
+                <div
+                    className={`tab ${selectedTab === 'JACKPOT' ? 'selected' : ''}`}
                     onClick={() => handleTabClick('JACKPOT')}
                 >
                     JACKPOT
@@ -96,7 +106,13 @@ const Tabs: React.FC = () => {
 
             {isSearchVisible && (
                 <div className="search-bar-container">
-                    <input type="text" placeholder="Search..." className="search-bar" />
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        className="search-bar"
+                        value={searchQuery}
+                        onChange={handleSearch}
+                    />
                     <button className="filter-btn">Filter</button>
                 </div>
             )}

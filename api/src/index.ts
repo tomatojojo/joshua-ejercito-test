@@ -7,21 +7,12 @@ const port = 5000;
 
 // Mock data for each tab
 const mockData: { [key: string]: { id: number; name: string;}[] } = {
-  START: [
-    { id: 1, name: 'Game 1'},
-    { id: 2, name: 'Game 2'},
-    { id: 3, name: 'Game 3'},
-    { id: 4, name: 'Game 4'},
-    { id: 5, name: 'Game 5'},
-    { id: 6, name: 'Game 6'},
-    { id: 7, name: 'Game 7'},
-    { id: 8, name: 'Game 8'},
-    { id: 9, name: 'Game 9'},
-    { id: 10, name: 'Game 10'},
-  ],
+  START: [],
   NEW: [
     { id: 1, name: 'New Game 1'},
     { id: 2, name: 'New Game 2'},
+    { id: 3, name: 'New Game 3'},
+    { id: 4, name: 'New Game 4'},
   ],
   SLOTS: [
     { id: 1, name: 'Slot Game 1' },
@@ -33,6 +24,7 @@ const mockData: { [key: string]: { id: number; name: string;}[] } = {
   JACKPOT: [
     { id: 1, name: 'Jackpot Game 1'},
     { id: 2, name: 'Jackpot Game 2'},
+    { id: 3, name: 'Jackpot Game 3'},
   ],
 };
 
@@ -43,8 +35,10 @@ app.use(express.json());
 app.get('/api/games/:category', (req: Request, res: Response) => {
   const category = req.params.category.toUpperCase();
 
-  // check category is a valid key in mockData
-  if (mockData[category as keyof typeof mockData]) {
+  if (category === 'START') {
+    const combinedGames = [...mockData.NEW, ...mockData.SLOTS, ...mockData.LIVE, ...mockData.JACKPOT];
+    res.json(combinedGames);
+  } else if (mockData[category as keyof typeof mockData]) {
     res.json(mockData[category as keyof typeof mockData]);
   } else {
     res.status(404).json({ message: 'Category not found' });
