@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ balance }) => {
         {/* Wallet icon, user icon, and balance */}
         <div className="navbar__icons">
           <div className="navbar__icon navbar__wallet-icon">💰</div>
-          <div className="navbar__balance">₱{balance.toFixed(2)}</div>
+          <div className="navbar__balance">${balance.toFixed(2)}</div>
           <div className="navbar__icon navbar__user-icon">👤</div>
         </div>
       </div>
