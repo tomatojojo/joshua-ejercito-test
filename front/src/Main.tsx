@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Carousel from './components/Carousel';
 import Notification from './components/Notifications';
 import Tabs from './components/Tabs';
+import BottomNav from './components/BottomNav';
 
 const Main: React.FC = () => {
   const userBalance = 1234.56;
@@ -19,6 +20,7 @@ const Main: React.FC = () => {
       <Carousel images={carouselImages} />
       <Notification />
       <Tabs />
+      <BottomNav />
       {/* Other components or content here */}
     </div>
   );
