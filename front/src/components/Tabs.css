@@ -119,3 +119,64 @@
 .star-icon.favorited {
     color: rgb(255, 174, 0);
 }
+
+
+/* Styles for the filter popup */
+.filter-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+
+.provider-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.provider-btn {
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.provider-btn:hover {
+    background-color: #0056b3;
+    z-index: 1000;
+}
+
+.provider-btn:active {
+    background-color: #003c7d;
+    z-index: 1000;
+}

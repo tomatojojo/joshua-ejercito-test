@@ -6,7 +6,10 @@ const Tabs: React.FC = () => {
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>(''); // Search query
     const [games, setGames] = useState<any[]>([]);
+    const [originalGames, setOriginalGames] = useState<any[]>([]);
     const [favoritedGames, setFavoritedGames] = useState<Map<string, boolean>>(new Map());
+    const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
+    const [providers, setProviders] = useState<Set<string>>(new Set());
 
     const handleTabClick = async (tabName: string) => {
         setSelectedTab(tabName);
@@ -26,9 +29,13 @@ const Tabs: React.FC = () => {
         try {
             const data = await fetchGames;
             setGames(data);
+            setOriginalGames(data);
+            const newProviders = new Set(data.map((game) => game.provider));
+            setProviders(newProviders);
         } catch (error) {
             console.error('Error fetching games:', error);
             setGames([]);
+            setOriginalGames([]);
         }
     };
 
@@ -46,14 +53,14 @@ const Tabs: React.FC = () => {
 
             try {
                 const data = await fetchGames;
-                setGames(data);
+                setGames(originalGames);
             } catch (error) {
                 console.error('Error fetching games:', error);
                 setGames([]);
             }
         } else {
             // Filter the games based on search query
-            const filteredGames = games.filter((game) =>
+            const filteredGames = originalGames.filter((game) =>
                 game.name.toLowerCase().includes(e.target.value.toLowerCase())
             );
             setGames(filteredGames);
@@ -68,6 +75,26 @@ const Tabs: React.FC = () => {
             return updatedFavorites;
         });
     };
+
+    const handleFilterClick = () => {
+        setIsFilterVisible(!isFilterVisible);
+    };
+
+    const closePopup = () => {
+        setIsFilterVisible(false);
+    };
+
+    const filterByProvider = (provider: string) => {
+        const filteredGames = originalGames.filter((game) => {
+            const matchesSearch = game.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesProvider = game.provider === provider;
+            return matchesSearch && matchesProvider;
+        });
+        //console.log('Filtered games:', filteredGames);
+        setGames(filteredGames);
+        closePopup();
+    };
+    
 
     useEffect(() => {
         handleTabClick(selectedTab); // Fetch games when tab is first selected
@@ -123,7 +150,32 @@ const Tabs: React.FC = () => {
                         value={searchQuery}
                         onChange={handleSearch}
                     />
-                    <button className="filter-btn">Filter</button>
+                    <button className="filter-btn" onClick={handleFilterClick}>Filter</button>
+                </div>
+            )}
+
+            {/* Popup for filter options */}
+            {isFilterVisible && (
+                <div className="filter-popup">
+                    <div className="popup-content">
+                        <h2>Filter Options</h2>
+                        <div className="provider-buttons">
+                            {Array.from(providers).map((provider) => (
+                                <button
+                                    key={provider}
+                                    className="provider-btn"
+                                    onClick={() => {
+                                        console.log('Provider selected:', provider);
+                                        filterByProvider(provider);
+                                    }}
+                                >
+                                    {provider}
+                                </button>
+                            ))}
+                        </div>
+                        <button onClick={closePopup}>Close</button>
+                    </div>
+                    <div className="popup-overlay" onClick={closePopup}></div>
                 </div>
             )}
 
@@ -131,11 +183,12 @@ const Tabs: React.FC = () => {
             <div className="games-list">
                 {games.length > 0 ? (
                     games.map((game: any) => {
-                        console.log(game.uniqueId);
+                        //console.log(game.uniqueId);
                         return (
                             <div key={game.uniqueId} className="game-item">
                                 <h3>{game.name}</h3>
-                                <p>{game.description}</p>
+                                {/* <p>{game.description}</p> */}
+
                                 {/* Star icon for favoriting */}
                                 <span
                                     className={`star-icon ${favoritedGames.get(game.uniqueId) ? 'favorited' : ''}`}

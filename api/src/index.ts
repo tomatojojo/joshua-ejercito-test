@@ -6,28 +6,29 @@ const app = express();
 const port = 5000;
 
 // Mock data for each tab
-const mockData: { [key: string]: { id: number; name: string; description: string }[] } = {
+const mockData: { [key: string]: { id: number; name: string; description: string; provider: string }[] } = {
   START: [],
   NEW: [
-    { id: 1, name: 'New Game 1', description: 'New exciting game!' },
-    { id: 2, name: 'New Game 2', description: 'Try your luck with new game!' },
-    { id: 3, name: 'New Game 3', description: 'A fresh and fun game!' },
-    { id: 4, name: 'New Game 4', description: 'Explore new challenges!' },
+    { id: 1, name: 'New Game 1', description: 'New exciting game!', provider: 'Provider A' },
+    { id: 2, name: 'New Game 2', description: 'Try your luck with new game!', provider: 'Provider B' },
+    { id: 3, name: 'New Game 3', description: 'A fresh and fun game!', provider: 'Provider C' },
+    { id: 4, name: 'New Game 4', description: 'Explore new challenges!', provider: 'Provider A' },
   ],
   SLOTS: [
-    { id: 1, name: 'Slot Game 1', description: 'Spin the wheel and win!' },
-    { id: 2, name: 'Slot Game 2', description: 'Slot machine game for big wins!' },
+    { id: 1, name: 'Slot Game 1', description: 'Spin the wheel and win!', provider: 'Provider B' },
+    { id: 2, name: 'Slot Game 2', description: 'Slot machine game for big wins!', provider: 'Provider A' },
   ],
   LIVE: [
-    { id: 1, name: 'Live Game 1', description: 'Live game with real dealers!' },
+    { id: 1, name: 'Live Game 1', description: 'Live game with real dealers!', provider: 'Provider C' },
+    { id: 2, name: 'Live Game 2', description: 'Play live with other players!', provider: 'Provider A' },
+    { id: 3, name: 'Live Game 3', description: 'Live game for the ultimate experience!', provider: 'Provider B' },
   ],
   JACKPOT: [
-    { id: 1, name: 'Jackpot Game 1', description: 'Try your luck at the jackpot!' },
-    { id: 2, name: 'Jackpot Game 2', description: 'Win big with the jackpot!' },
-    { id: 3, name: 'Jackpot Game 3', description: 'Your chance at hitting the jackpot!' },
+    { id: 1, name: 'Jackpot Game 1', description: 'Try your luck at the jackpot!', provider: 'Provider B' },
+    { id: 2, name: 'Jackpot Game 2', description: 'Win big with the jackpot!', provider: 'Provider A' },
+    { id: 3, name: 'Jackpot Game 3', description: 'Your chance at hitting the jackpot!', provider: 'Provider C' },
   ],
 };
-
 
 app.use(cors());
 app.use(express.json());
