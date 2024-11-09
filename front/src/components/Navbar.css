@@ -1,0 +1,51 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #007bff; /* Fun88 blue */
+    padding: 10px 15px;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .navbar__menu-icon,
+  .navbar__wallet-icon,
+  .navbar__user-icon {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar__icon {
+    margin-right: 8px;
+  }
+  
+  .navbar__menu-icon {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .navbar__menu-icon .bar {
+    width: 20px;
+    height: 3px;
+    background-color: white;
+    margin: 2px 0;
+  }
+  
+  .navbar__title {
+    font-weight: bold;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .navbar__icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar__balance {
+    font-weight: bold;
+    font-size: 16px;
+  }
