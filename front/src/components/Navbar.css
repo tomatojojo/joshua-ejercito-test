@@ -2,9 +2,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #007bff; /* Fun88 blue */
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     padding: 10px 15px;
-    color: white;
+    color: #007bff;
   }
   
   .navbar__left {
@@ -23,13 +24,14 @@
   .navbar__menu-icon .bar {
     width: 20px;
     height: 3px;
-    background-color: white;
+    background-color: #007bff;
     margin: 2px 0;
   }
   
   .navbar__title {
     font-weight: bold;
     font-size: 18px;
+    color: #007bff;
   }
   
   .navbar__icons {
@@ -42,10 +44,12 @@
     display: flex;
     align-items: center;
     margin-left: 10px; /* Space between icons */
+    color: #007bff;
   }
   
   .navbar__balance {
     font-weight: bold;
     font-size: 16px;
     margin-right: 10px; /* Space between balance and user icon */
+    color: #007bff;
   }
