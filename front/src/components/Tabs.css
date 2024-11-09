@@ -63,3 +63,35 @@
 .filter-btn:hover {
     background-color: #0056b3;
 }
+
+.games-list {
+    margin-top: 20px;
+    margin-left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: left;
+}
+  
+.game-item {
+    width: 120px; 
+    height: 120px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+  
+  .game-item h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .game-item p {
+    margin-top: 5px;
+    color: #555;
+  }

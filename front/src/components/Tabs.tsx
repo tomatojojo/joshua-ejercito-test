@@ -1,18 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Tabs.css';
 
 const Tabs: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState<string>('');
     const [isSearchSelected, setIsSearchSelected] = useState<boolean>(false); 
-    const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false); 
+    const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
+    const [games, setGames] = useState<any[]>([]);
 
-    const handleTabClick = (tabName: string) => {
+    const handleTabClick = async (tabName: string) => {
         if (tabName === 'SEARCH') {
-            setIsSearchVisible(!isSearchVisible);
-            setIsSearchSelected(!isSearchSelected);
+          setIsSearchVisible(!isSearchVisible);
+          setIsSearchSelected(!isSearchSelected);
         } else {
-            setSelectedTab(tabName);
+          setSelectedTab(tabName);
+        //   const response = await fetch(`http://localhost:5000/api/games/${tabName}`);
+        //   const data = await response.json();
+        //   setGames(data);
+
+            const fetchGames = new Promise<any[]>((resolve, reject) => {
+                fetch(`http://localhost:5000/api/games/${tabName}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Bad Network Response');
+                        }
+                        return response.json();
+                    })
+                    .then((data) => resolve(data))
+                    .catch((error) => reject(error));
+            });
+
+            try {
+                const data = await fetchGames;
+                setGames(data);
+            } catch (error) {
+                console.error('Error fetching games:', error);
+                setGames([]);
+            }
         }
+    };
+
+    const chunkGames = (games: any[]) => {
+        const chunks = [];
+        let i = 0;
+        for (i = 0; i < games.length; i += 3) {
+            chunks.push(games.slice(i, i + 3));
+        }
+        return chunks;
     };
 
     return (
@@ -67,6 +100,20 @@ const Tabs: React.FC = () => {
                     <button className="filter-btn">Filter</button>
                 </div>
             )}
+
+            {/* Displaying the games list */}
+            <div className="games-list">
+                {games.length > 0 ? (
+                    games.map((game: any) => (
+                        <div key={game.id} className="game-item">
+                            <h3>{game.name}</h3>
+                            <p>{game.description}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No games available for this category.</p>
+                )}
+            </div>
         </div>
     );
 };
