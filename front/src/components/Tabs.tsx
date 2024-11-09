@@ -6,6 +6,7 @@ const Tabs: React.FC = () => {
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>(''); // Search query
     const [games, setGames] = useState<any[]>([]);
+    const [favoritedGames, setFavoritedGames] = useState<Map<string, boolean>>(new Map());
 
     const handleTabClick = async (tabName: string) => {
         setSelectedTab(tabName);
@@ -57,6 +58,15 @@ const Tabs: React.FC = () => {
             );
             setGames(filteredGames);
         }
+    };
+
+    const toggleFavorite = (uniqueId: string) => {
+        setFavoritedGames((prev) => {
+            const updatedFavorites = new Map(prev);
+            const isFavorited = updatedFavorites.get(uniqueId) || false;
+            updatedFavorites.set(uniqueId, !isFavorited); // Toggle the favorite status of the game
+            return updatedFavorites;
+        });
     };
 
     useEffect(() => {
@@ -120,12 +130,22 @@ const Tabs: React.FC = () => {
             {/* Displaying the games list */}
             <div className="games-list">
                 {games.length > 0 ? (
-                    games.map((game: any) => (
-                        <div key={game.id} className="game-item">
-                            <h3>{game.name}</h3>
-                            <p>{game.description}</p>
-                        </div>
-                    ))
+                    games.map((game: any) => {
+                        console.log(game.uniqueId);
+                        return (
+                            <div key={game.uniqueId} className="game-item">
+                                <h3>{game.name}</h3>
+                                <p>{game.description}</p>
+                                {/* Star icon for favoriting */}
+                                <span
+                                    className={`star-icon ${favoritedGames.get(game.uniqueId) ? 'favorited' : ''}`}
+                                    onClick={() => toggleFavorite(game.uniqueId)}
+                                >
+                                    ★
+                                </span>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p>No games available for this category.</p>
                 )}
