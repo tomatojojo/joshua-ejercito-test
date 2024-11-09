@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* Base mobile styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  max-width: 100%;
+  padding: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+}
+
+/* For larger screens if needed */
+@media (min-width: 768px) {
+  .App {
+    max-width: 100%;
+    padding: 15px;
+  }
+}
