@@ -15,7 +15,7 @@ const Tabs: React.FC = () => {
         setSelectedTab(tabName);
         // Fetch the games based on the selected tab
         const fetchGames = new Promise<any[]>((resolve, reject) => {
-            fetch(`http://localhost:5000/api/games/${tabName}`)
+            fetch(`http://localhost:5137/api/games/${tabName}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Bad Network Response');
@@ -47,7 +47,7 @@ const Tabs: React.FC = () => {
         if (e.target.value.trim() === '') {
             // If the search query is empty, reset the games list
             const fetchGames = new Promise<any[]>((resolve, reject) => {
-                fetch(`http://localhost:5000/api/games/${selectedTab}`)
+                fetch(`http://localhost:5137/api/games/${selectedTab}`)
                     .then((response) => response.json())
                     .then((data) => resolve(data))
                     .catch((error) => reject(error));
