@@ -1,6 +1,6 @@
 # Running the app.
-1. Open terminal in api folder, run ### `npm run dev`
-2. Open another terminal in front folder, run ### `npm start`
+1. Open terminal in api folder, run `npm run dev`
+2. Open another terminal in front folder, run `npm start`
 
 
 # Getting Started with Create React App
