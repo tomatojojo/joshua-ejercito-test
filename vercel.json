@@ -1,9 +1,15 @@
 {
-    "functions": {
-      "api/src/*.ts": {
-        "runtime": "nodejs18.x"
+    "version": 2,
+    "builds": [
+      {
+        "src": "front/package.json",
+        "use": "@vercel/react"
+      },
+      {
+        "src": "api/src/**/*.ts",
+        "use": "@vercel/node"
       }
-    },
+    ],
     "routes": [
       {
         "src": "/api/(.*)",
@@ -11,7 +17,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "/FRONT/$1"
+        "dest": "/front/$1"
       }
     ]
   }
