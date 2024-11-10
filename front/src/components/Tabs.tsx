@@ -20,6 +20,8 @@ const Tabs: React.FC = () => {
                     if (!response.ok) {
                         throw new Error('Bad Network Response');
                     }
+
+                    console.log('Response:', response);
                     return response.json();
                 })
                 .then((data) => resolve(data))
