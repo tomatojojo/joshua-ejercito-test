@@ -31,37 +31,29 @@ const mockData: { [key: string]: { id: number; name: string; description: string
   ],
 };
 
-app.use(cors());
-app.use(express.json());
-
-// Endpoint to get games for each tab
-app.get('/api/games/:category', (req: Request, res: Response) => {
-  const category = req.params.category.toUpperCase();
-
-  const modifiedData = mockData[category as keyof typeof mockData].map((game) => ({
-    ...game,
-    uniqueId: `${category}-${game.id}`, //unique id
-  }));
-
-  if (category === 'START') {
-    const combinedGames = [
-      ...mockData.NEW, 
-      ...mockData.SLOTS, 
-      ...mockData.LIVE, 
-      ...mockData.JACKPOT,
-    ].map((game) => ({
+export default function handler(req: VercelRequest, res: VercelResponse) {
+    const { category } = req.query;
+    const categoryUpper = String(category).toUpperCase();
+  
+    const modifiedData = mockData[categoryUpper as keyof typeof mockData]?.map((game) => ({
       ...game,
-      uniqueId: `START-${game.id}-${game.name}`,
+      uniqueId: `${categoryUpper}-${game.id}`,
     }));
-    res.json(combinedGames);
-  } else if (modifiedData.length > 0) {
-    res.json(modifiedData);
-  } else {
-    res.status(404).json({ message: 'Category not found' });
+  
+    if (categoryUpper === 'START') {
+      const combinedGames = [
+        ...mockData.NEW,
+        ...mockData.SLOTS,
+        ...mockData.LIVE,
+        ...mockData.JACKPOT,
+      ].map((game) => ({
+        ...game,
+        uniqueId: `START-${game.id}-${game.name}`,
+      }));
+      res.json(combinedGames);
+    } else if (modifiedData && modifiedData.length > 0) {
+      res.json(modifiedData);
+    } else {
+      res.status(404).json({ message: 'Category not found' });
+    }
   }
-});
-
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
