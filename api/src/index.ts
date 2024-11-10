@@ -30,13 +30,7 @@ const mockData: { [key: string]: { id: number; name: string; description: string
   ],
 };
 
-const corsOptions = {
-  origin: '*', // Allow requests from this origin
-  // allowedHeaders: ['application/json'], // Allow specific headers (if needed)
-  preflightContinue: true, // preflight requests reaching the API
-};
-
-app.use(cors(corsOptions));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Endpoint to get games for each tab
