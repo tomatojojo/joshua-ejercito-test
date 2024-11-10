@@ -31,9 +31,10 @@ const mockData: { [key: string]: { id: number; name: string; description: string
 };
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Allow requests from this origin
-  methods: ['GET', 'POST'],       // Allow specific methods (if needed)
+  origin: '*', // Allow requests from this origin
+  methods: ['GET', 'POST', 'OPTIONS'],       // Allow specific methods (if needed)
   allowedHeaders: ['Content-Type'], // Allow specific headers (if needed)
+  preflightContinue: true, // preflight requests reaching the API
 };
 
 app.use(cors(corsOptions));
