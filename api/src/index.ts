@@ -30,7 +30,13 @@ const mockData: { [key: string]: { id: number; name: string; description: string
   ],
 };
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  methods: ['GET', 'POST'],       // Allow specific methods (if needed)
+  allowedHeaders: ['Content-Type'], // Allow specific headers (if needed)
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Endpoint to get games for each tab
@@ -62,5 +68,5 @@ app.get('/api/games/:category', (req: Request, res: Response) => {
 
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at ${port}`);
 });
